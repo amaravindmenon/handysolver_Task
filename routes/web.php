@@ -19,5 +19,6 @@ Route::get('/',[categoryController::class,'index'] );
 
 Route::post('/addTodo',[nameController::class,'store']);
 Route::get('/getTodo',[nameController::class,'index']);
-//Route::post('/editTodo',[nameController::class,'edit']);
+Route::post('/editTodo',[nameController::class,'edit']);
+Route::post('/updateTodo',[nameController::class,'update']);
 Route::post('/deleteTodo',[nameController::class,'destroy']);

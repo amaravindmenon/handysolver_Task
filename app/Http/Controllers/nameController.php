@@ -80,7 +80,7 @@ class nameController extends Controller
      */
     public function edit(Request $request)
     {
-        /*
+        
         $result = TodoName::where('id',$request->id)->first();
 
         if($result) {
@@ -91,7 +91,7 @@ class nameController extends Controller
         }else{
             return response()->json(['message'=>'error', 'code'=>500]);
         }
-        */
+        
     }
 
     /**
@@ -101,9 +101,17 @@ class nameController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $result = TodoName::where('id',$request->id)->update(['category_id'=>$request->edit_todo, 'name'=>$request->edit_name ]);
+        
+        if($result) {
+            return response()->json(['message'=>'updated',
+            'code'=>200,
+        ]);
+        }else{
+            return response()->json(['message'=>'error', 'code'=>500]);
+        }
     }
 
     /**

@@ -60,7 +60,7 @@
                             <th>TODO Item name</th>
                             <th>Category</th>
                             <th>Timestamp</th>
-                            <!--<th> Edit </th> --> 
+                            <th> Edit </th>
                             <th> Actions </th>
                         </tr>
                     </thead>
@@ -81,6 +81,7 @@
       <div class="modal-body">
         <form id="updateform">
             {{ csrf_field() }}
+            <input type="hidden" name="id" id="id">
             <div class="form-group">
             <label for="">Update Category</label>
             <select name="edit_todo" class="form-control">
@@ -98,7 +99,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" id="update" class="btn btn-primary">Save changes</button>
+        <button type="submit" id="update" class="btn btn-primary">Update changes</button>
       </div>
     </div>
   </div>
@@ -139,12 +140,11 @@
                     { "data": "name" },
                     { "data": "category_id" },
                     { "data": "created_at" },
-                    /*
                     { "data": null, 
                         render: function ( data, type, row ) {
                             return '<button class="btn btn-success" data-id='+row.id+' data-bs-toggle="modal" data-bs-target="#exampleModal" id="edit" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Edit</button>';
                     }},
-                    */
+                    
                     { "data": null, 
                         render: function ( data, type, row ) {
                             return "<button class='btn btn-danger' id='delete' data-id="+row.id+">Delete</button>";
@@ -153,9 +153,9 @@
             });
             
 
-/*            //Edit Modal
+            //Edit Modal
         $(document).on('click', '#edit', function(){
-            alert($(this).data("id"));
+            //alert($(this).data("id"));
                 $.ajax({
                     url: "{{ url('editTodo') }}",
                     type: 'POST',
@@ -165,12 +165,38 @@
                             "id": $(this).data('id')
                         },
                     success: function(response){
-                        console.log(response.data);
+                        $('input[name="id"]').val(response.data.id);
+                        $('select[name="edit_todo"]').val(response.data.category_id);
+                        $('input[name="edit_todo"]').val(response.data.category_id);
+                        $('select[name="edit_name"]').val(response.data.name);
+                        $('input[name="edit_name"]').val(response.data.name);
+
                     }
 
                 })
         })
-*/
+
+        //update
+        $(document).on('click', '#update', function(){
+            if(confirm("Are you sure you want to update?"))
+            {
+                $.ajax
+                ({
+                    url: "{{ url('updateTodo') }}",
+                    type: 'POST',
+                    datatype: 'json',
+                    data: $('#updateform').serialize(),
+                    success: function(response)
+                    {
+                        $('#updateform')[0].reset();
+                        table.ajax.reload();
+                        $('#exampleModal').modal('hide');
+                    }
+
+                })
+            }
+        })
+
         $(document).on('click', '#delete', function ()
             {
                 if(confirm('Are you sure you want to delete this TODO Operation?'))
